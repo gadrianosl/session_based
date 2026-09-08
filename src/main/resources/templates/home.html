@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Inicial - Session Based</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin-top: 30px; 
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .logo-canal {
+            max-width: 200px; /* Ajuste o tamanho máximo do seu logotipo aqui */
+            height: auto;
+            margin-bottom: 20px;
+        }
+        .btn { 
+            display: inline-block;
+            padding: 10px 20px; 
+            background-color: #ff4d4d; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- O Spring mapeia a pasta 'static' diretamente na raiz /, por isso usamos apenas /logo.png -->
+        <img th:src="@{/logo.png}" alt="Logotipo do Canal" class="logo-canal">
+
+        <h1>🎉 Login Efetuado com Sucesso!</h1>
+        <p>Você está logado no sistema utilizando Autenticação Baseada em Sessão.</p>
+        
+        <a href="/logout" class="btn">Efetuar Logout (Sair)</a>
+    </div>
+
+</body>
+</html>

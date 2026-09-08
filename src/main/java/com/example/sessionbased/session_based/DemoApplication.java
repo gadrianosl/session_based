@@ -1,4 +1,4 @@
-package com.example.sessionbased.demo;
+package com.example.sessionbased.session_based;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
