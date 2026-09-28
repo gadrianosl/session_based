@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciador de Usuários - Interno</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin-top: 30px; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center; }
+        .container { width: 90%; max-width: 800px; background: white; padding: 25px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .logo-canal { max-width: 120px; height: auto; display: block; margin: 0 auto 15px auto; }
+        h2, p { text-align: center; }
+        .form-cadastro { max-width: 400px; margin: 0 auto 30px auto; }
+        .form-group { margin-bottom: 12px; text-align: left; }
+        label { display: block; margin-bottom: 4px; font-weight: bold; color: #333; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-salvar { width: 100%; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-salvar:hover { background-color: #45a049; }
+        
+        /* Estilos da Tabela */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        
+        /* Botões de Ação */
+        .btn-edit { background-color: #ff9800; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; }
+        .btn-edit:hover { background-color: #e68a00; }
+        .btn-del { background-color: #f44336; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: bold; margin-left: 5px; }
+        .btn-del:hover { background-color: #da190b; }
+        .btn-voltar { display: block; text-align: center; margin-top: 15px; color: #0066cc; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img th:src="@{/logobranco.png}" alt="Logotipo do Canal" class="logo-canal">
+        <h2>📝 Gerenciador de Usuários</h2>
+        <p style="color: #666; font-size: 14px;">Área Restrita Administrativa</p>
+        
+        <!-- Formulário de Cadastro/Edição -->
+        <form th:action="@{/usuarios/cadastrar}" method="POST" class="form-cadastro" th:object="${usuarioForm}">
+            <!-- Campo oculto para armazenar o ID na edição -->
+            <input type="hidden" th:field="*{id}" id="id">
+            
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" th:field="*{nome}" id="nome" required placeholder="Ex: João Silva">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" th:field="*{email}" id="email" required placeholder="Ex: joao@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="username">Nome de Usuário (Login):</label>
+                <input type="text" th:field="*{username}" id="username" required placeholder="Ex: joao.silva">
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <!-- Removido o 'required' para permitir editar o usuário sem obrigar a trocar a senha sempre -->
+                <input type="password" th:field="*{senha}" id="senha" placeholder="Digite uma nova senha ou deixe em branco">
+                <small style="color:#777;" id="senhaHelp"></small>
+            </div>
+
+            <button type="submit" class="btn-salvar" id="btnAcao">Salvar Usuário</button>
+            <a th:if="*{id != null}" href="/usuarios/novo" class="btn-voltar" style="color: #555;">Cancelar Edição</a>
+        </form>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <!-- Tabela de Visualização -->
+        <h3>📋 Usuários Cadastrados no Sistema</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Login</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop que lê a lista enviada pelo Spring Controller -->
+                <tr th:each="u : ${listaUsuarios}">
+                    <td th:text="${u.id}">1</td>
+                    <td th:text="${u.nome}">Nome</td>
+                    <td th:text="${u.email}">email@email.com</td>
+                    <td th:text="${u.username}">username</td>
+                    <td>
+                        <!-- Botão que recarrega a página passando o ID do usuário para edição -->
+                        <a th:href="@{/usuarios/editar/{id}(id=${u.id})}" class="btn-edit">Editar</a>
+                        <!-- Botão de exclusão rápida -->
+                        <a th:href="@{/usuarios/excluir/{id}(id=${u.id})}" class="btn-del" onclick="return confirm('Deseja realmente excluir este usuário?')">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a href="/" class="btn-voltar">← Voltar para a Home</a>
+    </div>
+
+</body>
+</html>
