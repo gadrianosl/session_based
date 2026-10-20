@@ -17,8 +17,19 @@ public class HomeController {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String confirmarLogout() {
+        return "logout";
+    }
+
     @GetMapping("/")
-    public String paginaInicial() {
+    public String paginaInicial(java.security.Principal principal, Model model) {
+        model.addAttribute("username", principal.getName());
         return "home"; 
     }
 

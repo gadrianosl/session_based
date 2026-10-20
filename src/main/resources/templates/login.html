@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Entrar - Session Based</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+<main class="card">
+    <h1>Entrar no sistema</h1>
+    <p>Informe seu usuário e senha para continuar.</p>
+    <p th:if="${param.error}" class="message error" role="alert">Usuário ou senha inválidos.</p>
+    <p th:if="${param.logout}" class="message success" role="status">Você saiu do sistema com sucesso.</p>
+    <!-- Thymeleaf inclui o campo CSRF neste formulário POST. -->
+    <form th:action="@{/login}" method="post">
+        <label for="username">Usuário</label>
+        <input id="username" name="username" type="text" autocomplete="username" required autofocus>
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button type="submit">Entrar</button>
+    </form>
+</main>
+</body>
+</html>

@@ -2,11 +2,9 @@ package com.example.sessionbased.session_based;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,10 +20,24 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().authenticated() // Bloqueia tudo, exigindo login para qualquer tela
+                .requestMatchers("/login", "/css/**", "/logo.png", "/logobranco.png", "/error").permitAll()
+                .anyRequest().authenticated()
             )
-            .formLogin(Customizer.withDefaults()) // Ativa a tela de login padrão
-            .logout(Customizer.withDefaults());   // Ativa a rota de logout padrão
+            .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/")
+                .failureUrl("/login?error")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout") // POST com CSRF; GET é nossa tela de confirmação
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+            );
             
         return http.build();
     }
